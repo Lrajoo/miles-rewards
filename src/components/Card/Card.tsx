@@ -3,43 +3,55 @@ import styled from "styled-components";
 import { Row } from "antd";
 import { Draggable } from "react-beautiful-dnd";
 import cancelIcon from "../../assets/Icons/cancel.svg";
+import { Reward } from "../../models/Reward";
 
 const SimpleCard = styled.div`
-  margin: 8px;
+  margin: 5px;
   border: 2px solid black;
   background-color: white;
   border-radius: 5px;
-`
+`;
 
 interface CardProps {
-  id: string
-  content: string
-  index: number
-  removeReward(id: string): void
+  index: number;
+  reward: Reward;
+  removeReward(id: string): void;
 }
 
 export const Card: FC<CardProps> = (props: CardProps) => {
   return (
-    <Draggable draggableId={props.id} index={props.index}>
+    <Draggable draggableId={props.reward.id} index={props.index}>
       {(provided, snapshot) => (
         <SimpleCard
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <Row justify="end">
-            <img
-              alt="Cancel"
-              src={cancelIcon}
-              style={{ padding: "5px" }}
-              onClick={() => props.removeReward(props.id)}
-            />
-          </Row>
+          {props.reward.destination === "category" && (
+            <Row justify="end">
+              <img
+                alt="Cancel"
+                src={cancelIcon}
+                style={{ padding: "5px" }}
+                onClick={() => props.removeReward(props.reward.id)}
+              />
+            </Row>
+          )}
           <Row justify="center">
-            <h3 style={{ padding: "10px 20px" }}>{props.content}</h3>
+            <h3
+              style={{
+                paddingTop:
+                  props.reward.destination === "category" ? "0px" : "20px",
+                paddingBottom: "20px",
+                paddingLeft: "20px",
+                paddingRight: "20px"
+              }}
+            >
+              {props.reward.name}
+            </h3>
           </Row>
         </SimpleCard>
       )}
     </Draggable>
-  )
-}
+  );
+};

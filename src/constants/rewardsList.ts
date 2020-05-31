@@ -1,23 +1,30 @@
+import { v4 as uuidv4 } from "uuid"; 
+
 export const RewardsList = [
     { 
-        id:'r1',
-        name: 'R1'
+        id: `R1${uuidv4()}`,
+        name: 'R1',
+        destination: 'reward'
     },
     { 
-        id:'r2',
-        name: 'R2'
+        id: `R2${uuidv4()}`,
+        name: 'R2',
+        destination: 'reward'
     },
     { 
-        id:'r3',
-        name: 'R3'
+        id: `R3${uuidv4()}`,
+        name: 'R3',
+        destination: 'reward'
     },
     { 
-        id:'r4',
-        name: 'R4'
+        id: `R4${uuidv4()}`,
+        name: 'R4',
+        destination: 'reward'
     },
     { 
-        id:'r5',
-        name: 'R5'
+        id: `R5${uuidv4()}`,
+        name: 'R5',
+        destination: 'reward'
     }
 ]
   
