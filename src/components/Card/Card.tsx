@@ -5,10 +5,14 @@ import { Draggable } from "react-beautiful-dnd";
 import cancelIcon from "../../assets/Icons/cancel.svg";
 import { Reward } from "../../models/Reward";
 
-const SimpleCard = styled.div`
+interface SimpleCardProps {
+  isDragging?: boolean
+}
+
+const SimpleCard = styled.div<SimpleCardProps>`
   margin: 5px;
   border: 2px solid black;
-  background-color: white;
+  background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
   border-radius: 5px;
 `;
 
@@ -26,6 +30,7 @@ export const Card: FC<CardProps> = (props: CardProps) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
+          isDragging={snapshot.isDragging}
         >
           {props.reward.destination === "category" && (
             <Row justify="end">

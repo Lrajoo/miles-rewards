@@ -28,7 +28,7 @@ export const Column: FC<ColumnProps> = (props: ColumnProps) => {
     <Container>
       {props.title && <h1 style={{ textAlign: "center" }}>{props.title}</h1>}
       <Droppable droppableId={props.id}>
-        {provided => (
+        {(provided, snapshot) => (
           <RewardList {...provided.droppableProps} ref={provided.innerRef}>
             {props.rewards.map((reward, index) => (
               <Row justify="center" align="middle" key={reward.id}>

@@ -17,16 +17,13 @@ class RewardsVM {
 
   onDragEnd = (result: any) => {
     const { destination, source, draggableId } = result;
-    console.log(result);
     if (!destination) {
-      console.log("dropping outside");
       return;
     }
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
     ) {
-      console.log("same spot");
       return;
     }
 
@@ -42,9 +39,6 @@ class RewardsVM {
           .map(reward => reward.id.slice(0, 2))
           .includes(draggableId.slice(0, 2))
       : false;
-
-    console.log("addingReward", addingReward);
-    console.log("rewardExists", rewardExists);
 
     if (addingReward && !rewardExists) {
       this.categoryList.forEach(category => {
@@ -75,9 +69,8 @@ class RewardsVM {
       });
     }
   };
-  
+
   removeReward = (id: string) => {
-    console.log("remove reward");
     this.categoryList.forEach(category => {
       category.rewards = category.rewards.filter(reward => reward.id !== id);
     });
