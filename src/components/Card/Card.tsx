@@ -12,7 +12,7 @@ interface SimpleCardProps {
 const SimpleCard = styled.div<SimpleCardProps>`
   margin: 5px;
   border: 2px solid black;
-  background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
+  background-color: white;
   border-radius: 5px;
 `;
 
@@ -30,7 +30,6 @@ export const Card: FC<CardProps> = (props: CardProps) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          isDragging={snapshot.isDragging}
         >
           {props.reward.destination === "category" && (
             <Row justify="end">

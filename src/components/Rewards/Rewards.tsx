@@ -6,7 +6,7 @@ import { Reward } from "../../models/Reward";
 import { Category } from "../../models/Category";
 import { RewardsList } from "../../constants/rewardsList";
 import { CategoriesList } from "../../constants/catergoriesList";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, DraggableLocation, DropResult } from "react-beautiful-dnd";
 import { Column } from "../Column/Column";
 import { v4 as uuidv4 } from "uuid";
 const { Content } = Layout;
@@ -15,7 +15,7 @@ class RewardsVM {
   @observable rewardList: Reward[] = [];
   @observable categoryList: Category[] = [];
 
-  onDragEnd = (result: any) => {
+  onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
     if (!destination) {
       return;
@@ -31,20 +31,12 @@ class RewardsVM {
       source.droppableId === "rewards" &&
       ["c1", "c2", "c3", "c4", "c5"].includes(destination.droppableId);
 
-    const currCategory = this.categoryList.find(
-      category => category.id === destination.droppableId
-    );
-    const rewardExists = currCategory
-      ? currCategory.rewards
-          .map(reward => reward.id.slice(0, 2))
-          .includes(draggableId.slice(0, 2))
-      : false;
+    const rewardExists: boolean = this.isRewardAddable(destination, draggableId.slice(0,2))
 
     if (addingReward && !rewardExists) {
       this.categoryList.forEach(category => {
         if (category.id === destination.droppableId) {
-          const id = draggableId.slice(0, 2);
-          category.rewards.push(new Reward(`${id}${uuidv4()}`, id, "category"));
+          category.rewards.push(new Reward(`${draggableId.slice(0, 2)}${uuidv4()}`, draggableId.slice(0, 2), "category"));
         }
       });
       return;
@@ -53,13 +45,7 @@ class RewardsVM {
     if (!addingReward && !rewardExists) {
       this.categoryList.forEach(category => {
         if (category.id === source.droppableId) {
-          const reward = category.rewards.find(
-            reward => reward.id === draggableId
-          );
-          if (reward) {
-            const i = category.rewards.indexOf(reward);
-            category.rewards.splice(i, 1);
-          }
+          this.removeReward(draggableId)
         }
         if (category.id === destination.droppableId) {
           category.rewards.push(
@@ -69,6 +55,17 @@ class RewardsVM {
       });
     }
   };
+
+  isRewardAddable = (destination: DraggableLocation, id: string) => {
+    const currCategory = this.categoryList.find(
+      category => category.id === destination.droppableId
+    );
+    return currCategory
+      ? currCategory.rewards
+          .map(reward => reward.id.slice(0, 2))
+          .includes(id)
+      : false;
+  }
 
   removeReward = (id: string) => {
     this.categoryList.forEach(category => {
